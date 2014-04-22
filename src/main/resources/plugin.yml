@@ -1,0 +1,6 @@
+name: HolographicFactionMap
+version: 1.0-SNAPSHOT
+description:  Hooks into HoloAPI and Factions to display holographic faction maps
+author: Loopyluke
+
+main: com.loopyluke.holographicfactionmap.Main
