@@ -5,4 +5,4 @@ author: Loopyluke
 
 main: com.loopyluke.holographicfactionmap.HolographicFactionMap
 
-depend: [HoloAPI]
+depend: [HoloAPI, Factions]

@@ -13,46 +13,34 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import static org.bukkit.event.block.Action.*;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.server.MapInitializeEvent;
 
 
 /**
- *
- * @author Luke
+ * @author Loopyluke
  */
 public final class HoloMapListener implements Listener{
-    HolographicFactionMap hfm;
-    //boolean initializeCancelled = false;
     
-    public HoloMapListener(HolographicFactionMap hfm){
-        this.hfm = hfm;
+    public HoloMapListener(){
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onRightClick(PlayerInteractEvent event){
         if (event.hasItem()){
             Material m = event.getItem().getType();
+            //Open a player's map
             if (event.getAction() == RIGHT_CLICK_BLOCK){
                 if (m == EMPTY_MAP || m == MAP){
-                    hfm.hmm.openMap(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
-                    event.setCancelled(true);
+                    HolographicFactionMap.getManager()
+                    .openMap(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 3.5, 0.5));
+                    //event.setCancelled(true);
                 }
+            //Close any open map for the player
             }else if (event.getAction() == RIGHT_CLICK_AIR){
                 if (m == EMPTY_MAP || m == MAP){
-                    hfm.hmm.closeMap(event.getPlayer());
-                    event.setCancelled(true);
+                    HolographicFactionMap.getManager().closeMap(event.getPlayer());
+                    //event.setCancelled(true);
                 }
             }
         }
     }
-    
-    /*
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onMapInitialize(MapInitializeEvent event){
-        if(initializeCancelled){
-            
-        }
-    }
-    */
-    
 }

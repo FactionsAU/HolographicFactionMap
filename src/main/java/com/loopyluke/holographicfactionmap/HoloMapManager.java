@@ -6,28 +6,22 @@
 
 package com.loopyluke.holographicfactionmap;
 
-import com.dsh105.holoapi.api.SimpleHoloManager;
 import java.util.HashMap;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
- *
- * @author Luke
+ * @author Loopyluke
  */
-public class HoloMapManager extends SimpleHoloManager {
+public class HoloMapManager{
+    HashMap <UUID, HoloMap> holoMaps = new HashMap<UUID, HoloMap>();
     
-    HashMap <UUID, HoloMap> holoMaps;
-    HolographicFactionMap hfm;
-    
-    public HoloMapManager(HolographicFactionMap hfm){
-        this.hfm = hfm;
-        holoMaps = new HashMap<UUID, HoloMap>();
+    public HoloMapManager(){
     }
     
     /*
-    * Opens a player's holographic map.
+    * Opens a player's holographic map
     */
     public void openMap(Player pl, Location loc){
         if (pl != null){
@@ -35,20 +29,35 @@ public class HoloMapManager extends SimpleHoloManager {
             closeMap(pl);
 
             //Open a new map
-            holoMaps.put(pl.getUniqueId(), new HoloMap(hfm, pl, loc));
+            holoMaps.put(pl.getUniqueId(), new HoloMap(pl, loc));
         }
     }
     
     /*
-    * Closes the player's holographic map.
+    * Closes a player's holographic map
     */
     public void closeMap(Player pl){
         if (pl != null){
             HoloMap map = holoMaps.get(pl.getUniqueId());
+            
             //Remove the map and its associated hologram(s)
             if (map != null){
                 map.close();
                 holoMaps.remove(pl.getUniqueId());
+            }
+        }
+    }
+    
+    /*
+    * Closes all open HoloMaps
+    */
+    public void closeAllMaps(){
+        HoloMap map;
+        for (UUID player: holoMaps.keySet()){
+            map = holoMaps.get(player);
+            if (map != null){
+                map.close();
+                holoMaps.remove(player);
             }
         }
     }
