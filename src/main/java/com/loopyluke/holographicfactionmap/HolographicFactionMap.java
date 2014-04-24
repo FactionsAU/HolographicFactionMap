@@ -4,34 +4,31 @@
  */
 package com.loopyluke.holographicfactionmap;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import com.dsh105.holoapi.HoloAPI;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
 
 /**
  *
- * @author ja731j
+ * @author Loopyluke
  */
 public class HolographicFactionMap extends JavaPlugin{
-        @Override
+    HoloMapManager hmm;
+    HoloAPI HAPI;
+    
+    @Override
     public void onEnable() {
+        
+        hmm = new HoloMapManager(this);
+        
+        getServer().getPluginManager().registerEvents(new HoloMapListener(this), this);
+        
         getLogger().info("The HolographicFactionMap plugin has been loaded");
     }
 
     @Override
     public void onDisable() {
         getLogger().info("The HolographicFactionMap plugin has been unloaded");
-    }
-    
-    @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if(sender instanceof Player){
-            Player player = (Player)sender;
-            player.sendMessage("Hello, "+player.getName()+"!");
-        }else{
-            sender.sendMessage("This command can only be run by players!");
-        }
-        return true;
     }
 }
