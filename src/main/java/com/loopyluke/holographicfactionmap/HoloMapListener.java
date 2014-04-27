@@ -31,7 +31,7 @@ public final class HoloMapListener implements Listener{
             if (event.getAction() == RIGHT_CLICK_BLOCK){
                 if (m == EMPTY_MAP || m == MAP){
                     HolographicFactionMap.getManager()
-                    .openMap(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 3.5, 0.5));
+                        .openMap(event.getPlayer(), event.getClickedBlock().getLocation().add(0.5, 4.5, 0.5));
                     //event.setCancelled(true);
                 }
             //Close any open map for the player
