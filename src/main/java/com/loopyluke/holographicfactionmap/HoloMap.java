@@ -149,11 +149,11 @@ public class HoloMap {
         //Other factions
         symbols.put(Rel.ALLY, "A");
         symbols.put(Rel.ENEMY, "X");
-        symbols.put(Rel.TRUCE, "$");
         symbols.put(Rel.NEUTRAL, "=");
         //And a string for no faction
-        String NONE = ":::";
+        String NONE = "-";
         String WARZONE = "%";
+        String SAFEZONE = "$";
         
         //Get a list of chat colors
         List<ChatColor> colors = new ArrayList<ChatColor>(Arrays.asList(ChatColor.values()));
@@ -168,12 +168,12 @@ public class HoloMap {
         colors.remove(ChatColor.GRAY); //Map background
         colors.remove(ChatColor.GREEN); //Own faction
         colors.remove(ChatColor.AQUA); //Player location
-        colors.remove(ChatColor.RED); //Warzone
+        colors.remove(ChatColor.DARK_RED); //WarZone
+        colors.remove(ChatColor.GOLD); //SafeZone
         
-        //Create iterators for orientations
+        //Create iterators for relations
         Iterator<ChatColor> neutral = colors.iterator();
         Iterator<ChatColor> ally = colors.iterator();
-        Iterator<ChatColor> truce = colors.iterator();
         Iterator<ChatColor> enemy = colors.iterator();
 
         // For each row
@@ -199,34 +199,24 @@ public class HoloMap {
                 else
                 {
                     //A faction exists at this location
-                    if ((!FactionCols.containsKey(hereFaction)) && (hereFaction.getName() != "WARZONE")){
+                    if (!FactionCols.containsKey(hereFaction)){
                         //Add the faction to the hashmap as it does not already exist
                         switch (hereFaction.getRelationTo(observer)){
                             case NEUTRAL:
                                 if (!neutral.hasNext()){
                                     neutral = colors.iterator();
-                                    neutral.next();
                                 }
                                 FactionCols.put(hereFaction, neutral.next());
                                 break;
                             case ALLY:
                                 if (!ally.hasNext()){
                                     ally = colors.iterator();
-                                    ally.next();
                                 }
                                 FactionCols.put(hereFaction, ally.next());
-                                break;
-                            case TRUCE:
-                                if (!truce.hasNext()){
-                                    truce = colors.iterator();
-                                    truce.next();
-                                }
-                                FactionCols.put(hereFaction, truce.next());
                                 break;
                             case ENEMY:
                                 if (!enemy.hasNext()){
                                     enemy = colors.iterator();
-                                    enemy.next();
                                 }
                                 FactionCols.put(hereFaction, enemy.next());
                                 break;
@@ -239,8 +229,12 @@ public class HoloMap {
                         }
                     }
                     //Add the character to the map row
-                    if (hereFaction.getName() == "WARZONE"){
-                        row += ChatColor.RED + WARZONE;
+                    if (hereFaction.getRelationTo(observer) == Rel.TRUCE){
+                        if (hereFaction.getFlag(FFlag.PVP)){
+                            row += ChatColor.DARK_RED + WARZONE;
+                        }else{
+                            row += ChatColor.GOLD + SAFEZONE;
+                        }
                     }else{
                         row += FactionCols.get(hereFaction) + symbols.get(hereFaction.getRelationTo(observer));
                     }
