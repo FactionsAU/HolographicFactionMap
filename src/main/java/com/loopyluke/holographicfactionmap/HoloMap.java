@@ -63,7 +63,7 @@ public class HoloMap {
         String[] west = appendDirection(mapStrings, "West");
         
         hologram = new DynamicHologram(loc,north,east,south,west);
-        
+        HoloAPI.getManager().track(hologram, HolographicFactionMap.getPlugin());
         //Schedule a close task to automatically close the map
         closeIn(300);
 
