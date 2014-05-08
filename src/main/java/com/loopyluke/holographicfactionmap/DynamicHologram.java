@@ -2,6 +2,7 @@ package com.loopyluke.holographicfactionmap;
 
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
+import com.dsh105.holoapi.util.SaveIdGenerator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +16,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 
 public class DynamicHologram extends Hologram{
 
@@ -25,6 +25,8 @@ public class DynamicHologram extends Hologram{
     
     private static Map<Player, BlockFace> facings = new HashMap<>();
     private static Set<DynamicHologram> holograms = new HashSet<>();
+    
+    private Map<BlockFace,String[]> displays = new HashMap<>();
 
     public boolean add(DynamicHologram h) {
         return holograms.add(h);
@@ -40,55 +42,30 @@ public class DynamicHologram extends Hologram{
         updateTask.cancel();
     }
     
-    public void releasePlayer(Player p){
+    public static void releasePlayer(Player p){
         facings.remove(p);
     }
 
     @Override
-    protected void move(Player observer, Vector to) {
-        super.move(observer, to); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void show(Player observer, double x, double y, double z) {
-        super.show(observer, x, y, z); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void show(Player observer, Location location) {
-        super.show(observer, location); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void show(Player observer) {
-        super.show(observer); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void updateLine(int index, String content) {
-        super.updateLine(index, content); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void refreshDisplay() {
-        super.refreshDisplay(); //To change body of generated methods, choose Tools | Templates.
+    public void clearAllPlayerViews(){
+        remove(this);
+        super.clearAllPlayerViews();
     }
 
     @Override
     public boolean isSimple() {
-        return super.isSimple(); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
-    public DynamicHologram(int firstTagId, String saveId, String worldName, double x, double y, double z, String... lines) {
-        super(firstTagId, saveId, worldName, x, y, z, lines);
+    public DynamicHologram(Location loc, String[] north, String[] east, String[] south, String[] west){
+        super(SaveIdGenerator.nextId()+"", loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), north);
+        displays.put(BlockFace.NORTH, north);
+        displays.put(BlockFace.EAST, east);
+        displays.put(BlockFace.SOUTH, south);
+        displays.put(BlockFace.WEST, west);
         registerTask();
     }
-
-    public DynamicHologram(String saveId, String worldName, double x, double y, double z, String... lines) {
-        super(saveId, worldName, x, y, z, lines);
-        registerTask();
-    }
-    
+        
     private void registerTask(){
         holograms.add(this);
         if(updateTask == null){
@@ -99,6 +76,10 @@ public class DynamicHologram extends Hologram{
                 }
             }.runTaskTimer(HoloAPI.getCore(), 0L, 1L);
         }
+    }
+    
+    private void updateLines(Player p, BlockFace face){
+        updateLines(p, displays.get(face));
     }
     
     static void updateHolograms(){
@@ -112,7 +93,7 @@ public class DynamicHologram extends Hologram{
         BlockFace face = Util.yawToFace(l.getYaw(), false);
         if(facings.get(p) != face){
             facings.put(p, face);
-            holograms.forEach((h) -> h.show(p));
+            holograms.forEach((h) -> h.updateLines(p, face));
         }   
     }
 }

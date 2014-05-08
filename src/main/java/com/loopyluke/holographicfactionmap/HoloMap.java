@@ -9,6 +9,7 @@ package com.loopyluke.holographicfactionmap;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.util.SaveIdGenerator;
 import com.massivecraft.factions.Const;
 import com.massivecraft.factions.FFlag;
 import com.massivecraft.factions.Rel;
@@ -55,13 +56,13 @@ public class HoloMap {
         }
         
         //Construct the map hologram
-        HologramFactory f = new HologramFactory(HolographicFactionMap.getPlugin());
-        f.withLocation(loc)
-            .withSimplicity(true);
-        for (String str: mapStrings){
-            f.withText(str);
-        }
-        hologram = f.build();
+        String saveId = SaveIdGenerator.nextId()+"";
+        String[] north = appendDirection(mapStrings, "north");
+        String[] east = appendDirection(mapStrings, "East");
+        String[] south = appendDirection(mapStrings, "South");
+        String[] west = appendDirection(mapStrings, "West");
+        
+        hologram = new DynamicHologram(loc,north,east,south,west);
         
         //Schedule a close task to automatically close the map
         closeIn(300);
@@ -102,6 +103,12 @@ public class HoloMap {
     */
     public UUID getPlayerID(){
         return pl.getUniqueId();
+    }
+
+    private String[] appendDirection(ArrayList<String> mapStrings, String north) {
+        ArrayList<String> out = new ArrayList<>(mapStrings);
+        out.add(north);
+        return (String[]) out.toArray();
     }
     
     enum Orientation{
