@@ -9,6 +9,7 @@ package com.loopyluke.holographicfactionmap;
 import com.dsh105.holoapi.HoloAPI;
 import com.dsh105.holoapi.api.Hologram;
 import com.dsh105.holoapi.api.HologramFactory;
+import com.dsh105.holoapi.api.visibility.VisibilityDefault;
 import com.dsh105.holoapi.util.SaveIdGenerator;
 import com.massivecraft.factions.Const;
 import com.massivecraft.factions.FFlag;
@@ -63,7 +64,12 @@ public class HoloMap {
         String[] west = appendDirection(mapStrings, "West");
         
         hologram = new DynamicHologram(loc,north,east,south,west);
+        hologram.setVisibility(new VisibilityDefault());
         HoloAPI.getManager().track(hologram, HolographicFactionMap.getPlugin());
+        
+        for(Player p: Bukkit.getServer().getOnlinePlayers()){
+                hologram.show(p, true);
+        }
         //Schedule a close task to automatically close the map
         closeIn(300);
 

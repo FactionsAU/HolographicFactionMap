@@ -18,6 +18,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+                <version>2.3.2</version>
             </plugin>
         </plugins>
     </build>
@@ -29,6 +30,10 @@
     <!-- The Bukkit Maven Repository -->
     <repositories>
         <repository>
+            <id>hawk-repo2</id>
+            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
+        </repository>
+        <repository>
             <id>Bukkit Official</id>
             <url>http://repo.bukkit.org/content/repositories/public</url>
         </repository>
@@ -36,10 +41,6 @@
         <repository>
             <id>plugin-repo</id>
             <url>http://bukkit.jacekk.co.uk/plugin_repo/</url>
-        </repository>
-        <repository>
-            <id>hawk-repo</id>
-            <url>http://ci.hawkfalcon.com/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
@@ -67,7 +68,7 @@
         <dependency>
             <groupId>com.dsh105</groupId>
             <artifactId>HoloAPI</artifactId>
-            <version>1.2.2</version>
+            <version>1.2.3</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

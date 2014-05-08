@@ -59,10 +59,10 @@ public class DynamicHologram extends Hologram{
 
     public DynamicHologram(Location loc, String[] north, String[] east, String[] south, String[] west){
         super(SaveIdGenerator.nextId()+"", loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), north);
-        displays.put(BlockFace.NORTH, north);
-        displays.put(BlockFace.EAST, east);
-        displays.put(BlockFace.SOUTH, south);
-        displays.put(BlockFace.WEST, west);
+        displays.put(BlockFace.SOUTH, north);
+        displays.put(BlockFace.WEST, east);
+        displays.put(BlockFace.NORTH, south);
+        displays.put(BlockFace.EAST, west);
         registerTask();
     }
         
