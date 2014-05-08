@@ -106,9 +106,13 @@ public class HoloMap {
     }
 
     private String[] appendDirection(ArrayList<String> mapStrings, String north) {
-        ArrayList<String> out = new ArrayList<>(mapStrings);
+        ArrayList<String> out = new ArrayList<String>(mapStrings);
         out.add(north);
-        return (String[]) out.toArray();
+        
+        String[] outArr = new String[out.size()];
+        outArr = out.toArray(outArr);
+        
+        return  outArr;
     }
     
     enum Orientation{
